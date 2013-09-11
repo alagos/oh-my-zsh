@@ -24,3 +24,5 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+#show instances running for a specific process. Eg: psg chrome
+alias psg="ps -fea|grep" 
