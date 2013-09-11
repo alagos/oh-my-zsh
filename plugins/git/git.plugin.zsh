@@ -3,8 +3,14 @@ alias g='git'
 compdef g=git
 alias gst='git status'
 compdef _git gst=git-status
+alias gss='git status -s'
+compdef _git gss=git-status
+alias gsti='git status --ignored'
+compdef _git gsti=git-status
 alias gd='git diff'
 compdef _git gd=git-diff
+alias gds='git diff --stat' #Show changes statistics
+compdef _git gds=git-diff
 alias gl='git pull'
 compdef _git gl=git-pull
 alias gup='git pull --rebase'
@@ -53,8 +59,6 @@ alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
 alias glo='git log --oneline'
 compdef _git glo=git-log
-alias gss='git status -s'
-compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
 alias gm='git merge'
@@ -66,6 +70,24 @@ compdef _git grhh=git-reset
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gf='git ls-files | grep'
 alias gpoat='git push origin --all && git push origin --tags'
+
+alias gcln='git clean -nd' # Test removal of untracked files and directories
+alias gclf='git clean -fd' # Remove untracked files and directories
+
+# Stashing aliases
+alias gsh='git stash'
+alias gsha='git stash apply'
+alias gshc='git stash clear'
+alias gshl='git stash list'
+alias gshp='git stash pop'
+compdef _git gsh=git-stash
+compdef _git gsha=git-stash
+compdef _git gshc=git-stash
+compdef _git gshl=git-stash
+compdef _git gshp=git-stash
+
+# Will stage all files marked as 'deleted'
+alias grma="git diff --diff-filter=D --name-only -z | xargs -0 git rm"
 
 # Will cd into the top of the current repository
 # or submodule.
