@@ -11,11 +11,13 @@ alias gd='git diff'
 compdef _git gd=git-diff
 alias gds='git diff --stat' #Show changes statistics
 compdef _git gds=git-diff
-alias gl='git pull'
-compdef _git gl=git-pull
+alias gpu='git pull'
+alias gpuo='git pull origin'
+compdef _git gpu=git-pull
 alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
+alias gpo='git push origin'
 compdef _git gp=git-push
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
@@ -131,3 +133,11 @@ function _git_log_prettily(){
 }
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
+
+# Make a rm to all files marked as 'deleted'
+alias grd="git diff --diff-filter=D --name-only -z | xargs -0 git rm ; git status"
+
+# aliases for git flow
+alias gff='git flow feature'
+alias gfh='git flow hotfix'
+alias gfr='git flow release'
