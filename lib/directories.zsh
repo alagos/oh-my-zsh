@@ -43,4 +43,5 @@ alias rd=rmdir
 alias d='dirs -v | head -10'
 
 # personal directories
-alias 4tal='cd ~/4talent/workspace/talent-s-return'
+alias 4t='cd ~/4talent/workspace/other_4talent'
+alias bci='cd ~/4talent/workspace/bci_solutions/'
