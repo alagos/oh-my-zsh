@@ -12,8 +12,13 @@ compdef _git gd=git-diff
 alias gds='git diff --stat' #Show changes statistics
 compdef _git gds=git-diff
 alias gpu='git pull'
-alias gpuo='git pull origin'
 compdef _git gpu=git-pull
+alias gpuo='git pull origin'
+compdef _git gpuo=git-pull
+alias gdc='git diff --cached'
+compdef _git gdc=git-diff
+alias gl='git log'
+compdef _git gl=git-log
 alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
@@ -29,6 +34,8 @@ alias gca='git commit -v -a'
 compdef _git gca=git-commit
 alias gca!='git commit -v -a --amend'
 compdef _git gca!=git-commit
+alias gcmsg='git commit -m'
+compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcm='git checkout master'
@@ -44,6 +51,12 @@ alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
 compdef _git grup=git-remote
+alias grbi='git rebase -i'
+compdef _git grbi=git-rebase
+alias grbc='git rebase --continue'
+compdef _git grbc=git-rebase
+alias grba='git rebase --abort'
+compdef _git grba=git-rebase
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -53,16 +66,20 @@ compdef _git gcount=git-shortlog
 alias gcl='git config --list'
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
-alias glg='git log --stat --max-count=5'
+alias glg='git log --stat --max-count=10'
 compdef _git glg=git-log
-alias glgg='git log --graph --max-count=5'
+alias glgg='git log --graph --max-count=10'
 compdef _git glgg=git-log
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
 alias glggao='git log --graph --decorate --all --oneline'
 compdef _git glggao=git-log
-alias glo='git log --oneline'
+alias glo='git log --oneline --decorate --color'
 compdef _git glo=git-log
+alias glog='git log --oneline --decorate --color --graph'
+compdef _git glog=git-log
+alias gss='git status -s'
+compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
 alias gm='git merge'
@@ -71,9 +88,24 @@ alias grh='git reset HEAD'
 compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
+alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
-alias gf='git ls-files | grep'
+
+#remove the gf alias
+#alias gf='git ls-files | grep'
+
 alias gpoat='git push origin --all && git push origin --tags'
+alias gmt='git mergetool --no-prompt'
+compdef _git gm=git-mergetool
+
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
+alias gk='gitk --all --branches'
+
+alias gsts='git stash show --text'
+alias gsta='git stash'
+alias gstp='git stash pop'
+alias gstd='git stash drop'
 
 alias gcln='git clean -nd' # Test removal of untracked files and directories
 alias gclf='git clean -fd' # Remove untracked files and directories
@@ -122,6 +154,8 @@ function current_repository() {
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
+alias ggpur='git pull --rebase origin $(current_branch)'
+compdef ggpur=git
 alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
@@ -143,3 +177,25 @@ alias grd="git diff --diff-filter=D --name-only -z | xargs -0 git rm ; git statu
 alias gff='git flow feature'
 alias gfh='git flow hotfix'
 alias gfr='git flow release'
+# Work In Progress (wip)
+# These features allow to pause a branch development and switch to another one (wip)
+# When you want to go back to work, just unwip it
+#
+# This function return a warning if the current branch is a wip
+function work_in_progress() {
+  if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
+    echo "WIP!!"
+  fi
+}
+# these alias commit and uncomit wip branches
+alias gwip='git add -A; git ls-files --deleted -z | xargs -r0 git rm; git commit -m "--wip--"'
+alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+
+# these alias ignore changes to file
+alias gignore='git update-index --assume-unchanged'
+alias gunignore='git update-index --no-assume-unchanged'
+# list temporarily ignored files
+alias gignored='git ls-files -v | grep "^[[:lower:]]"'
+
+
+
