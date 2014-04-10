@@ -11,5 +11,6 @@ setopt long_list_jobs
 ## pager
 export PAGER="less"
 export LESS="-R"
+export LESSOPEN='|pygmentize %s'
 
 export LC_CTYPE=$LANG
