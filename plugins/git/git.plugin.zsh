@@ -59,6 +59,8 @@ alias glgg='git log --graph --max-count=5'
 compdef _git glgg=git-log
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
+alias glggao='git log --graph --decorate --all --oneline'
+compdef _git glggao=git-log
 alias glo='git log --oneline'
 compdef _git glo=git-log
 alias ga='git add'
