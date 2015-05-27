@@ -51,7 +51,7 @@ function try_alias_value() {
 #
 # Arguments:
 #    1. name - The variable to set
-#    2. val  - The default value 
+#    2. val  - The default value
 # Return value:
 #    0 if the variable exists, 3 if it was set
 #
@@ -65,11 +65,16 @@ function default() {
 #
 # Arguments:
 #    1. name - The env variable to set
-#    2. val  - The default value 
+#    2. val  - The default value
 # Return value:
 #    0 if the env variable exists, 3 if it was set
 #
 function env_default() {
-    env | grep -q "^$1=" && return 0 
+    env | grep -q "^$1=" && return 0
     export "$1=$2"       && return 3
+}
+
+# Finds a specific file type recursively and moves to a location
+function mvr() {
+  find ./ -name $1 | xargs -I files mv files $2 -v
 }
