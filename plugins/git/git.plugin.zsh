@@ -1,4 +1,43 @@
+# Query/use custom command for `git`.
+zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
+: ${_omz_git_git_cmd:=git}
+
+#
+# Functions
+#
+
+# The name of the current branch
+# Back-compatibility wrapper for when this function was defined here in
+# the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
+# to fix the core -> git plugin dependency.
+function current_branch() {
+  git_current_branch
+}
+# The list of remotes
+function current_repository() {
+  if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
+    return
+  fi
+  echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
+}
+# Pretty log messages
+function _git_log_prettily(){
+  if ! [ -z $1 ]; then
+    git log --pretty=$1
+  fi
+}
+# Warn if the current branch is a WIP
+function work_in_progress() {
+  if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
+    echo "WIP!!"
+  fi
+}
+
+#
 # Aliases
+# (sorted alphabetically)
+#
+
 alias g='git'
 compdef g=git
 alias gsw='git show'
@@ -42,16 +81,22 @@ compdef _git gpom=git-push
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gdt='git difftool'
-alias gc='git commit -v'
-compdef _git gc=git-commit
+# alias gc='git commit -v'
 alias gc!='git commit -v --amend'
-compdef _git gc!=git-commit
+alias gcn!='git commit -v --no-edit --amend'
 alias gca='git commit -v -a'
 compdef _git gca=git-commit
 alias gca!='git commit -v -a --amend'
-compdef _git gca!=git-commit
+alias gcan!='git commit -v -a --no-edit --amend'
+alias gcans!='git commit -v -a -s --no-edit --amend'
+alias gcam='git commit -a -m'
+alias gcb='git checkout -b'
+alias gcf='git config --list'
+alias gcl='git clone --recursive'
+alias gclean='git clean -fd'
+alias gpristine='git reset --hard && git clean -dfx'
+alias gcm='git checkout master'
 alias gcmsg='git commit -m'
-compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcom='git checkout master'
@@ -120,31 +165,35 @@ alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
 # Sign and verify commits with GPG
 alias gcs='git commit -S'
-compdef _git gcs=git-commit
-alias gsps='git show --pretty=short --show-signature'
-compdef _git gsps=git-show
 
-# Sign and verify tags with GPG
-alias gts='git tag -s'
-compdef _git gts=git-tag
-alias gvt='git verify-tag'
-compdef _git gvt=git verify-tag
+alias gcount='git shortlog -sn'
+compdef gcount=git
+alias gcp='git cherry-pick'
 
-#remove the gf alias
-#alias gf='git ls-files | grep'
+alias gd='git diff'
+alias gdca='git diff --cached'
+alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
+alias gdt='git diff-tree --no-commit-id --name-only -r'
+alias gdw='git diff --word-diff'
 
-alias gpoat='git push origin --all && git push origin --tags'
-alias gmt='git mergetool --no-prompt'
-compdef _git gmt=git-mergetool
+gdv() { git diff -w "$@" | view - }
+compdef _git gdv=git-diff
+
+alias gf='git fetch'
+alias gfa='git fetch --all --prune'
+alias gfo='git fetch origin'
+
+function gfg() { git ls-files | grep $@ }
+compdef _grep gfg
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
-alias gk='gitk --all --branches'
 
-alias gsts='git stash show --text'
-alias gsta='git stash'
-alias gstp='git stash pop'
-alias gstd='git stash drop'
+ggf() {
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  git push --force origin "${b:=$1}"
+}
+compdef _git ggf=git-checkout
 
 alias gcln='git clean -nd' # Test removal of untracked files and directories
 alias gclf='git clean -fd' # Remove untracked files and directories
@@ -168,44 +217,75 @@ alias grma="git diff --diff-filter=D --name-only -z | xargs -0 git rm"
 # or submodule.
 alias grt='cd $(git rev-parse --show-toplevel || echo ".")'
 
-# Git and svn mix
+ggl() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    git pull origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
+    git pull origin "${b:=$1}"
+  fi
+}
+compdef _git ggl=git-checkout
+
+ggp() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    git push origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
+    git push origin "${b:=$1}"
+  fi
+}
+compdef _git ggp=git-checkout
+
+ggpnp() {
+  if [[ "$#" == 0 ]]; then
+    ggl && ggp
+  else
+    ggl "${*}" && ggp "${*}"
+  fi
+}
+compdef _git ggpnp=git-checkout
+
+ggu() {
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  git pull --rebase origin "${b:=$1}"
+}
+compdef _git ggu=git-checkout
+
+alias ggpur='ggu'
+compdef _git ggpur=git-checkout
+
+alias ggpull='git pull origin $(git_current_branch)'
+compdef _git ggpull=git-checkout
+
+alias ggpush='git push origin $(git_current_branch)'
+compdef _git ggpush=git-checkout
+
+alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
+
+alias gpsup='git push --set-upstream origin $(git_current_branch)'
+
+alias gignore='git update-index --assume-unchanged'
+alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
 compdef git-svn-dcommit-push=git
 
-alias gsr='git svn rebase'
-alias gsd='git svn dcommit'
-#
-# Will return the current branch name
-# Usage example: git pull origin $(current_branch)
-#
-function current_branch() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
-  echo ${ref#refs/heads/}
-}
+alias gk='\gitk --all --branches'
+compdef _git gk='gitk'
+alias gke='\gitk --all $(git log -g --pretty=format:%h)'
+compdef _git gke='gitk'
 
-function current_repository() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
-  echo $(git remote -v | cut -d':' -f 2)
-}
-
-# these aliases take advantage of the previous function
-alias ggpull='git pull origin $(current_branch)'
-compdef ggpull=git
-alias ggpur='git pull --rebase origin $(current_branch)'
-compdef ggpur=git
-alias ggpush='git push origin $(current_branch)'
-compdef ggpush=git
-alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
-compdef ggpnp=git
-
-# Pretty log messages
-function _git_log_prettily(){
-  if ! [ -z $1 ]; then
-    git log --pretty=$1
-  fi
-}
+alias gl='git pull'
+alias glg='git log --stat'
+alias glgp='git log --stat -p'
+alias glgg='git log --graph'
+alias glgga='git log --graph --decorate --all'
+alias glgm='git log --graph --max-count=10'
+alias glo='git log --oneline --decorate'
+alias glol="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias glola="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all"
+alias glog='git log --oneline --decorate --graph'
+alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
 
@@ -230,10 +310,15 @@ function work_in_progress() {
 alias gwip='git add -A; git ls-files --deleted -z | xargs -r0 git rm; git commit -m "--wip--"'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 
-# these alias ignore changes to file
-alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
 alias git-sort-branches="git for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:short) %(authorname) %(refname:short)'"
+alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+alias gup='git pull --rebase'
+alias gupv='git pull --rebase -v'
+alias glum='git pull upstream master'
+
+alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
