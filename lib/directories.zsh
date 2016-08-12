@@ -1,15 +1,12 @@
 # Changing/making/removing directory
-setopt auto_name_dirs
 setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
 
-alias ..='cd ..'
-alias cd..='cd ..'
-alias cd...='cd ../..'
-alias cd....='cd ../../..'
-alias cd.....='cd ../../../..'
-alias cd/='cd /'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
 
 alias 1='cd -'
 alias 2='cd -2'
@@ -21,38 +18,41 @@ alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
 
-cd () {
-  if   [[ "x$*" == "x..." ]]; then
-    cd ../..
-  elif [[ "x$*" == "x...." ]]; then
-    cd ../../..
-  elif [[ "x$*" == "x....." ]]; then
-    cd ../../../..
-  elif [[ "x$*" == "x......" ]]; then
-    cd ../../../../..
-  elif [ -d ~/.autoenv ]; then
-    source ~/.autoenv/activate.sh
-    autoenv_cd "$@"
-  else
-    builtin cd "$@"
-  fi
-}
-
 alias md='mkdir -p'
 alias rd=rmdir
 alias d='dirs -v | head -10'
 
+# List directory contents
+alias lsa='ls -lah'
+alias l='ls -lah'
+alias ll='ls -lh'
+alias la='ls -lAh'
+
+# Push and pop directories on directory stack
+alias pu='pushd'
+alias po='popd'
+
+#show instances running for a specific process. Eg: psg chrome
+alias psg="ps -fea|grep"
+
 # personal directories
-alias 4t='cd ~/4talent/workspace/other_4talent'
-alias bci='cd ~/4talent/workspace/bci_solutions/'
-alias tao='cd ~/tao/workspace/tao_main'
+alias 4t='cd ~/workspace/4talent/other_4talent'
+alias bci='cd ~/workspace/4talent/bci_solutions/'
 alias wish='cd ~/workspace/starwish'
 alias rabel='cd ~/workspace/rabel'
-alias turbius='cd ~/workspace/turbius'
-alias hb='cd ~/odesk/martian/hb_upgrade'
-alias foc='cd ~/odesk/martian/foc_rebate'
-alias cchmc='cd ~/odesk/martian/cchmc'
-alias pd='cd ~/odesk/martian/practicaldesk'
-alias cls='cd ~/odesk/martian/claim_submit'
-alias geoe='cd ~/odesk/martian/geocerts_edge'
-alias geoc='cd ~/odesk/martian/geocerts.com'
+alias turc='cd ~/workspace/turbius-core'
+alias turs='cd ~/workspace/turbius-static'
+alias hb='cd ~/workspace/upwork/martian/hb_upgrade'
+alias foc='cd ~/workspace/upwork/martian/foc_rebate'
+alias cchmc='cd ~/workspace/upwork/martian/cchmc'
+alias pd='cd ~/workspace/upwork/martian/practicaldesk'
+alias cls='cd ~/workspace/upwork/martian/claim_submit'
+alias geoe='cd ~/workspace/upwork/martian/geocerts_edge'
+alias geoc='cd ~/workspace/upwork/martian/geocerts.com'
+alias canv='cd ~/workspace/upwork/learning_tapestry/canvas'
+alias ry='cd ~/workspace/upwork/learning_tapestry/raiseyou'
+alias ryc='cd ~/workspace/upwork/learning_tapestry/core'
+alias cf='cd ~/workspace/upwork/etison/clickfunnels'
+alias cdy='cd ~/workspace/upwork/atlas/clouddentistry'
+alias sba='cd ~/workspace/upwork/atlas/sba2013'
+alias mem='cd ~/workspace/members'

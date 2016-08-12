@@ -19,10 +19,16 @@ alias gpu='git pull'
 compdef _git gpu=git-pull
 alias gpuo='git pull origin'
 compdef _git gpuo=git-pull
+alias gpuom='git pull origin master'
+compdef _git gpuom=git-pull
+alias gpuod='git pull origin develop'
+compdef _git gpuod=git-pull
 alias gdc='git diff --cached'
 compdef _git gdc=git-diff
 alias gl='git log'
 compdef _git gl=git-log
+alias gdt='git diff-tree --no-commit-id --name-only -r'
+compdef _git gdc=git diff-tree --no-commit-id --name-only -r
 alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
@@ -31,8 +37,11 @@ alias gpo='git push origin'
 compdef _git gpo=git-push
 alias gpom='git push origin master'
 compdef _git gpom=git-push
+alias gphm='git push heroku master'
+compdef _git gpom=git-push
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
+alias gdt='git difftool'
 alias gc='git commit -v'
 compdef _git gc=git-commit
 alias gc!='git commit -v --amend'
@@ -46,6 +55,9 @@ compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcom='git checkout master'
+compdef _git gcom=git-checkout
+alias gcod='git checkout develop'
+compdef _git gcod=git-checkout
 alias gr='git remote'
 compdef _git gr=git-remote
 alias grv='git remote -v'
@@ -68,6 +80,7 @@ alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
+alias gbr='git branch --remote'
 alias gcount='git shortlog -sn'
 compdef _git gcount=git-shortlog
 alias gcl='git config --list'
@@ -87,10 +100,17 @@ alias glog='git log --oneline --decorate --color --graph'
 compdef _git glog=git-log
 alias gss='git status -s'
 compdef _git gss=git-status
-alias ga='git add'
+function ga() { git add "$@"; git status; }
+function gc() { git commit "$@" ; git status; }
+function gcm() { git commit -m "$@" ; git status; }
+function gcam() { git commit -a -m "$@" ; git status; }
 compdef _git ga=git-add
+alias gap='git add --patch'
+alias gaa='git add --all'
 alias gm='git merge'
 compdef _git gm=git-merge
+alias gmm='git merge master'
+compdef _git gmm=git-merge
 alias grh='git reset HEAD'
 compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
@@ -98,12 +118,24 @@ compdef _git grhh=git-reset
 alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
+# Sign and verify commits with GPG
+alias gcs='git commit -S'
+compdef _git gcs=git-commit
+alias gsps='git show --pretty=short --show-signature'
+compdef _git gsps=git-show
+
+# Sign and verify tags with GPG
+alias gts='git tag -s'
+compdef _git gts=git-tag
+alias gvt='git verify-tag'
+compdef _git gvt=git verify-tag
+
 #remove the gf alias
 #alias gf='git ls-files | grep'
 
 alias gpoat='git push origin --all && git push origin --tags'
 alias gmt='git mergetool --no-prompt'
-compdef _git gm=git-mergetool
+compdef _git gmt=git-mergetool
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
@@ -204,5 +236,4 @@ alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
-
-
+alias git-sort-branches="git for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:short) %(authorname) %(refname:short)'"
