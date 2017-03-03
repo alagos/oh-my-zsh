@@ -254,7 +254,7 @@ compdef g=git
 compdef gcount=git
 
 function ga() { git add "$@"; git status; }
-function gc() { git commit -m "$@" ; git status; }
+function gc() { git commit "$@" ; git status; }
 function gcam() { git commit -a -m "$@" ; git status; }
 function gcm() { git commit -m "$@" ; git status; }
 function gfg() { git ls-files | grep $@ }
