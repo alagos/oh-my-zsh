@@ -18,12 +18,12 @@ BLUE_BOLD=$fg_bold[blue]
 CYAN_BOLD=$fg_bold[cyan]
 
 # Grab the current date (%W) and time (%t):
-JUNKFOOD_TIME_="%{$WHITE_BOLD%}( %{$YELLOW_BOLD%}%W%{$reset_color%}@%{$WHITE_BOLD%}%t )( %{$reset_color%}"
+JUNKFOOD_TIME_="%{$WHITE_BOLD%}( %{$YELLOW_BOLD%}%W%{$reset_color%}@%{$WHITE_BOLD%}%T )( %{$reset_color%}"
 
-# Grab the current username 
+# Grab the current username
 JUNKFOOD_CURRENT_USER_="%{$GREEN_BOLD%}%n%{$reset_color%}"
 
-# Grab the current machine name 
+# Grab the current machine name
 JUNKFOOD_MACHINE_="%{$BLUE_BOLD%}%m%{$WHITE_BOLD%} )%{$reset_color%}"
 
 JUNKFOOD_GIT_="\$(git_prompt_info)%{$reset_color%}"
