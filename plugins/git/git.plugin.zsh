@@ -54,11 +54,11 @@ alias gdm='git diff --diff-filter=M'
 compdef _git gdm=git-diff
 alias gds='git diff --stat' #Show changes statistics
 compdef _git gds=git-diff
-alias gpu='git pull'
+alias gpu='git pull --tags'
 compdef _git gpu=git-pull
 alias gpuo='git pull origin'
 compdef _git gpuo=git-pull
-alias gpuom='git pull origin master'
+alias gpuom='git pull origin master --tags'
 compdef _git gpuom=git-pull
 alias gpuod='git pull origin develop'
 compdef _git gpuod=git-pull
@@ -78,6 +78,8 @@ alias gpom='git push origin master'
 compdef _git gpom=git-push
 alias gphm='git push heroku master'
 compdef _git gpom=git-push
+alias gpod='git push origin develop'
+compdef _git gpod=git-pull
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gdt='git difftool'
@@ -275,7 +277,6 @@ compdef _git gk='gitk'
 alias gke='\gitk --all $(git log -g --pretty=format:%h)'
 compdef _git gke='gitk'
 
-alias gl='git pull'
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'
