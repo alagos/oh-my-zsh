@@ -19,9 +19,9 @@ fi
 setopt long_list_jobs
 
 ## pager
-export PAGER="less"
-export LESS="-R"
-export LESSOPEN='|pygmentize %s'
+env_default PAGER 'less'
+env_default LESS '-R'
+env_default LESSOPEN '|pygmentize %s'
 
 ## super user alias
 alias _='sudo'
