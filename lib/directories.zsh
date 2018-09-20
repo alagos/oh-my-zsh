@@ -28,6 +28,7 @@ alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
 alias la='ls -lAh'
+alias lc='colorls -lA --sd'
 
 # Push and pop directories on directory stack
 alias pu='pushd'
@@ -35,6 +36,8 @@ alias po='popd'
 
 #show instances running for a specific process. Eg: psg chrome
 alias psg="ps -fea|grep"
+
+alias xo="xdg-open"
 
 # personal directories
 alias 4t='cd ~/workspace/4talent/other_4talent'
@@ -59,3 +62,11 @@ alias sba='cd ~/workspace/upwork/atlas/sba2013'
 alias mem='cd ~/workspace/members'
 alias pw='cd ~/workspace/meloncargo/productswatcher'
 alias fapi='cd ~/workspace/meloncargo/facturapi'
+alias mbot='cd ~/workspace/meloncargo/melonbot'
+alias mapp='cd ~/workspace/upwork/youserve/Main-App'
+alias dipro='cd ~/workspace/meloncargo/diprotodon'
+alias dazu='cd ~/workspace/meloncargo/dragonfly-azure_data_store'
+alias cxp='cd ~/workspace/meloncargo/cx_parser'
+alias llc='cd ~/workspace/meloncargo/llaca/'
+alias llca='cd ~/workspace/meloncargo/llaca/apps/channel_advisor'
+alias mach='cd ~/workspace/machi'
