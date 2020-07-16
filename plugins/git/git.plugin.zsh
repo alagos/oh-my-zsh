@@ -160,22 +160,16 @@ alias gsd='git svn dcommit'
 alias gsh='git stash'
 alias gsha='git stash apply'
 alias gshc='git stash clear'
+alias gshd='git stash drop'
 alias gshl='git stash list'
 alias gshp='git stash pop'
+alias gshs='git stash show -p'
 alias gsi='git submodule init'
 alias gsps='git show --pretty=short --show-signature'
 alias gsr='git svn rebase'
 alias gss='git status -s'
 alias gst='git status'
-alias gsta='git stash save'
-alias gstaa='git stash apply'
-alias gstc='git stash clear'
-alias gstd='git stash drop'
 alias gsti='git status --ignored'
-alias gstl='git stash list'
-alias gstp='git stash pop'
-alias gsts='git stash show --text'
-alias gstall='git stash --all'
 alias gsu='git submodule update'
 alias gsw='git show'
 alias gunignore='git update-index --no-assume-unchanged'
@@ -186,7 +180,7 @@ alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git ls-files --deleted -z | xargs -r0 git rm; git commit -m "--wip--"' # this alias commit wip branches
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m "--wip-- [skip ci]"'
-compdef _git ga=git-add
+# compdef _git ga=git-add
 compdef _git gb=git-branch
 compdef _git gba=git-branch
 compdef _git gca=git-commit

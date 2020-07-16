@@ -25,10 +25,10 @@ alias d='dirs -v | head -10'
 
 # List directory contents
 alias lsa='ls -lah'
-alias l='ls -lah'
+# alias l='ls -lah'
+alias l='colorls -lA --sd'
 alias ll='ls -lh'
 alias la='ls -lAh'
-alias lc='colorls -lA --sd'
 
 # Push and pop directories on directory stack
 alias pu='pushd'

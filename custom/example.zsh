@@ -8,3 +8,11 @@
 # brainstormr=~/Projects/development/planetargon/brainstormr
 # cd $brainstormr
 #
+alias vw="cd ~/workspace/vwork"
+alias vww="cd ~/workspace/vwork/vworkapp/webapp"
+alias vwr="cd ~/workspace/vwork/vworkapp/reactive"
+alias vwrt="cd ~/workspace/vwork/regression-tests"
+alias dc='docker-compose -f ~/workspace/vwork/vworkapp/docker-compose.yml -f ~/workspace/vwork/vworkapp/docker-compose.dev.yml'
+
+alias cpr="rsync --archive --human-readable --verbose --progress --whole-file"
+alias wttr="curl wttr.in/akl?format=v2"
